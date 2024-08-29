@@ -14,25 +14,38 @@ def filter_datum(fields: List[str], redaction: str, message: str,
 
 
 class RedactingFormatter(logging.Formatter):
-    """ Redacting Formatter class for filtering PII in logs"""
+    """ Redacting Formatter class for
+    filtering PII data in log messages. """
 
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
-    def __init__(self, fields: list):
-        """Initializes the class
+    def __init__(self, fields: List[str]):
+        """
+        Initialize the formatter with a list of fields to redact.
+
         Args:
-            fields: A list of fields."""
+            fields (List[str]): The list of fields
+            to obfuscate in log messages.
+        """
         super(RedactingFormatter, self).__init__(self.FORMAT)
+        # Store the fields to be redacted.
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
-        """This method filters the incoming log records using filter_datum
+        """
+        Format the log record, filtering out sensitive information.
+
         Args:
             record (logging.LogRecord): The log record to be formatted.
+
         Returns:
-            A string of the formated log message with redaction implemented"""
+            str: The formatted log message with
+            redacted sensitive information.
+        """
+        # Obfuscate the sensitive fields in the log message.
         record.msg = filter_datum(self.fields, self.REDACTION,
                                   record.getMessage(), self.SEPARATOR)
-        return super().format(record)
+        # Format the log record using the parent class's format method.
+        return super(RedactingFormatter, self).format(record)
