@@ -20,7 +20,7 @@ class Auth:
             A boolean"""
         if path is None or path == '' or not path:
             return True
-        if excluded_paths is None or len(excluded_paths) == 0:
+        if excluded_paths is None or excluded_paths == []:
             return True
         if not excluded_paths:
             return True
