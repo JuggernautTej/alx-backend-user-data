@@ -106,24 +106,20 @@ class BasicAuth(Auth):
             User instance or None if no valid user is found."""
         # Authorization header retrieval from the request
         auth_header = self.authorization_header(request)
-        if auth_header is None:
-            return None
-
-        # Extraction of the Base64 part of the Authorization header
-        base64_auth = self.decode_base64_authorization_header(auth_header)
-        if base64_auth is None:
-            return None
-
-        # Decode the Base64 Authorization header
-        decoded_auth = self.decode_base64_authorization_header(base64_auth)
-        if decoded_auth is None:
-            return None
-
-        # Extraction of user email and password from the decoded string
-        email, password = self.extract_user_credentials(decoded_auth)
-        if email is None or password is None:
-            return None
-
-        # Retrieval of User instance based on email and password
-        user = self.user_object_from_credentials(email, password)
-        return user
+        if auth_header is not None:
+            # Extraction of the Base64 part of the Authorization header
+            base64_p = self.decode_base64_authorization_header(auth_header)
+            if base64_p is not None:
+                # Decode the Base64 Authorization header
+                decoded_p = self.decode_base64_authorization_header(base64_p)
+                if decoded_p is not None:
+                    # Extraction of user email and password from
+                    # the decoded string
+                    email, password = self.extract_user_credentials(decoded_p)
+                    if email is not None or password is not None:
+                        # Retrieval of User instance based on email
+                        # and password
+                        user = self.user_object_from_credentials(email,
+                                                                 password)
+                        return user
+        return None
