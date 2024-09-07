@@ -108,7 +108,7 @@ class BasicAuth(Auth):
         auth_header = self.authorization_header(request)
         if auth_header is not None:
             # Extraction of the Base64 part of the Authorization header
-            base64_p = self.decode_base64_authorization_header(auth_header)
+            base64_p = self.extract_base64_authorization_header(auth_header)
             if base64_p is not None:
                 # Decode the Base64 Authorization header
                 decoded_p = self.decode_base64_authorization_header(base64_p)
