@@ -9,16 +9,15 @@ app = Flask(__name__)
 AUTH = Auth()
 
 
-@app.route("/", methods=['GET'], strict_slashes=False)
+@app.route("/", methods=['GET'])
 def welcome() -> Response:
     """This method contsaisn the GET route for /.
     Returns:
         JSON: the payload."""
-    p_load = {"message": "Bienvenue"}
-    return jsonify(p_load)
+    return jsonify({"message": "Bienvenue"})
 
 
-@app.route("/user", methods=['POST'], strict_slashes=False)
+@app.route("/users", methods=['POST'])
 def users():
     """Registers a new user"""
     # Get the email and password from form data
