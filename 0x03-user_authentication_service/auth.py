@@ -23,6 +23,14 @@ def _hash_password(password: str) -> bytes:
     return hashed_pwd
 
 
+def _generate_uuid() -> str:
+    """This method returns a tring representation of a new UUID.
+
+    Returns:
+        str: String representation of a new UUID."""
+    return str(uuid.uuid4())
+
+
 class Auth:
     """Auth class to interact with the authentication database.
     """
@@ -68,13 +76,6 @@ class Auth:
             return False
         return False
 
-    def _generate_uuid() -> str:
-        """This method returns a tring representation of a new UUID.
-
-        Returns:
-            str: String representation of a new UUID."""
-        return str(uuid.uuid4())
-
     def create_session(self, email: str) -> str:
         """This method creates a new session for a user.
         Args:
@@ -85,7 +86,7 @@ class Auth:
             ValueError: If the user is not found."""
         try:
             user = self._db.find_user_by(email=email)
-            user_sess_id = self._generate_uuid()
+            user_sess_id = _generate_uuid()
             self._db.update_user(user.id, session_id=user_sess_id)
             return user.session_id
         except NoResultFound:
@@ -107,3 +108,6 @@ class Auth:
             return user
         except NoResultFound:
             return None
+
+    def destroy_session(self, user_id: int) -> None:
+        return
