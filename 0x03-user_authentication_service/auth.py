@@ -115,5 +115,11 @@ class Auth:
         """This method destroys a user's session.
 
         Args:
+            user_id (int): The user id of the user in question
+        Returns:
+            None
         """
-        return
+        try:
+            self._db.update_user(user_id, session_id=None)
+        except ValueError:
+            pass
