@@ -6,6 +6,7 @@ from uuid import uuid4
 from db import DB
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
+from typing import Union
 
 
 def _hash_password(password: str) -> bytes:
@@ -40,7 +41,7 @@ class Auth:
         """Initializes instance of DB"""
         self._db = DB()
 
-    def register_user(self, email: str, password: str) -> User:
+    def register_user(self, email: str, password: str) -> Union[None, User]:
         """This method registers a new user.
         Args:
             email (str): the email address of the user.
