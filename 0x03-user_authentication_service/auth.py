@@ -2,6 +2,7 @@
 """The auth script"""
 
 import bcrypt
+import uuid
 from db import DB
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
@@ -66,3 +67,43 @@ class Auth:
         except NoResultFound:
             return False
         return False
+
+    def _generate_uuid() -> str:
+        """This method returns a tring representation of a new UUID.
+
+        Returns:
+            str: String representation of a new UUID."""
+        return str(uuid.uuid4())
+
+    def create_session(self, email: str) -> str:
+        """This method creates a new session for a user.
+        Args:
+            email (str): The user's email.
+        Returns:
+            str: The session ID.
+        Raises:
+            ValueError: If the user is not found."""
+        try:
+            user = self._db.find_user_by(email=email)
+            user_sess_id = self._generate_uuid()
+            self._db.update_user(user.id, session_id=user_sess_id)
+            return user.session_id
+        except NoResultFound:
+            raise ValueError("User not found")
+
+    def get_user_from_session_id(self, session_id: str) -> User | None:
+        """This method finds a user using the session id.
+
+        Args:
+        session_id (str): The session id.
+
+        Returns:
+            User | None: The method returns the user of none.
+        """
+        if session_id is None:
+            return None
+        try:
+            user = self._db.find_user_by(session_id=session_id)
+            return user
+        except NoResultFound:
+            return None
